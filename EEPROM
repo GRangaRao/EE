@@ -1,0 +1,22 @@
+#!bin/bash
+
+#generate random data of 8K size
+head -c 8000 /dev/urandom >input.bin
+
+# write the 8K random input to eeprom
+dd if=input.bin of=/sys/bus/i2c/devices/1-0050/eeprom bs=1 count=8000
+
+# read the 8k random input from eeprom
+dd if=/sys/bus/i2c/devices/1-0050/eeprom of=output.bin bs=1 count=8000
+
+# compare the input and output from EEPROM
+
+if cmp -s input.bin output.bin
+then
+	echo "Files Match result Pass"
+else
+	echo "Files do not match result Fail"
+fi
+
+
+

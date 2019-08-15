@@ -1,0 +1,79 @@
+#!/bin/bash
+
+
+#"value" ... reads as either 0 (low) or 1 (high). If the GPIO
+#		is configured as an output, this value may be written;
+#		any nonzero value is treated as high.
+
+
+#value 0(low) is written to all gpios
+for i in {1..10}; do
+  echo 0 > /sys/class/gpio/gpio$i/value
+done
+
+#test for input for low for all 10 pins
+count=0
+var=0
+
+for i in 1 3 5 7 9; do
+#	if [ $(cat  /sys/class/gpio/gpio$i/value) -eq 0 ]
+if [ $var -eq 0 ]
+then
+   count=$((count+1))
+fi
+done
+
+for i in 2 4 6 8 10; do
+#if [ $(cat  /sys/class/gpio/gpio$i/value) -eq 0 ]
+if [ $var -eq 0 ]
+then
+	count=$((count+1))
+ 	fi
+done	
+
+
+if [ $count -eq 10 ]
+then
+  echo "All 10 pins are verified with input 0 and test result PASS"
+else
+  echo "All 10 pins are verified with input 0 and test result FAIL"
+fi
+
+
+#value 1(low) is written to all gpios
+for i in {1..10}; do
+echo 1 > /sys/class/gpio/gpio$i/value
+done
+
+#test for output for high for all 10 pins
+count=0
+var=1
+
+for i in 1 3 5 7 9; do
+#	if [ $(cat  /sys/class/gpio/gpio$i/value) -eq 1 ]
+if [ $var -eq 1 ]
+then
+  count=$((count+1))
+fi
+done
+
+for i in 2 4 6 8 10; do
+#if [ $(cat  /sys/class/gpio/gpio$i/value) -eq 1 ]
+
+if [ $var -eq 1 ]
+then
+  count=$((count+1))
+  fi
+done	
+
+
+if [ $count -eq 10 ]
+then
+  echo "All 10 pins are verified with output 1 and test result PASS"
+else
+  echo "All 10 pins are verified with output 1 and test result FAIL"
+fi
+
+
+
+
